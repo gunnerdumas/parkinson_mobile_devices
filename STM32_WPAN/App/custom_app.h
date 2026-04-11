@@ -69,6 +69,7 @@ void Custom_APP_Init(void);
 void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification);
 /* USER CODE BEGIN EF */
 void Push_IMU_Data(void);
+void Push_State(void);
 /* USER CODE END EF */
 
 #ifdef __cplusplus

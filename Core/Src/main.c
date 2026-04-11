@@ -349,9 +349,11 @@ static void MX_GPIO_Init(void)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	//Trick the sequencer to run this task every second
 	if(htim->Instance == TIM16)
 	{
 		UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_IMU, CFG_SCH_PRIO_0);
+//		UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_STATE, CFG_SCH_PRIO_0);
 //		HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
 	}
 }

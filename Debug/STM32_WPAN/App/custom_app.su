@@ -1,6 +1,9 @@
-../STM32_WPAN/App/custom_app.c:88:6:Push_IMU_Data	8	static
-../STM32_WPAN/App/custom_app.c:102:6:Custom_STM_App_Notification	16	static
-../STM32_WPAN/App/custom_app.c:144:6:Custom_APP_Notification	16	static
-../STM32_WPAN/App/custom_app.c:181:6:Custom_APP_Init	4	static
-../STM32_WPAN/App/custom_app.c:200:13:Custom_Data_imu_Update_Char	16	static
-../STM32_WPAN/App/custom_app.c:220:6:Custom_Data_imu_Send_Notification	16	static
+../STM32_WPAN/App/custom_app.c:91:6:Push_IMU_Data	8	static
+../STM32_WPAN/App/custom_app.c:101:6:Push_State	8	static
+../STM32_WPAN/App/custom_app.c:110:6:Custom_STM_App_Notification	16	static
+../STM32_WPAN/App/custom_app.c:164:6:Custom_APP_Notification	16	static
+../STM32_WPAN/App/custom_app.c:201:6:Custom_APP_Init	4	static
+../STM32_WPAN/App/custom_app.c:220:13:Custom_Data_imu_Update_Char	16	static
+../STM32_WPAN/App/custom_app.c:240:6:Custom_Data_imu_Send_Notification	16	static
+../STM32_WPAN/App/custom_app.c:260:13:Custom_Get_state_Update_Char	16	static
+../STM32_WPAN/App/custom_app.c:281:6:Custom_Get_state_Send_Notification	16	static

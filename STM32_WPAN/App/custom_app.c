@@ -37,6 +37,7 @@ typedef struct
 {
   /* parkinson_data */
   uint8_t               Data_imu_Notification_Status;
+  uint8_t               Get_state_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -73,8 +74,8 @@ uint8_t UpdateCharData[512];
 uint8_t NotifyCharData[512];
 uint16_t Connection_Handle;
 /* USER CODE BEGIN PV */
-uint8_t notifyStatus = 0;
-uint8_t timerStatus = 0;
+uint8_t notifyIMUStatus = 0;
+uint8_t notifyStateStatus = 0;
 
 /* USER CODE END PV */
 
@@ -82,18 +83,25 @@ uint8_t timerStatus = 0;
 /* parkinson_data */
 static void Custom_Data_imu_Update_Char(void);
 static void Custom_Data_imu_Send_Notification(void);
+static void Custom_Get_state_Update_Char(void);
+static void Custom_Get_state_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 
 void Push_IMU_Data(void)
 {
 
-	UpdateCharData[0]^=0x01;
-//	Custom_Data_imu_Send_Notification();
-
+	//setup data to be packaged and sent out
+//	UpdateCharData[0]^=0x01;
 	Custom_Data_imu_Update_Char();
-//	UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_IMU, CFG_SCH_PRIO_0);
 
+	UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_STATE, CFG_SCH_PRIO_0);
+}
+
+void Push_State(void)
+{
+//	UpdateCharData[1]^=0x01;
+	Custom_Get_state_Update_Char();
 }
 
 /* USER CODE END PFP */
@@ -113,14 +121,26 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
     /* parkinson_data */
     case CUSTOM_STM_DATA_IMU_NOTIFY_ENABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_DATA_IMU_NOTIFY_ENABLED_EVT */
-    	notifyStatus=1;
+    	notifyIMUStatus=1;
       /* USER CODE END CUSTOM_STM_DATA_IMU_NOTIFY_ENABLED_EVT */
       break;
 
     case CUSTOM_STM_DATA_IMU_NOTIFY_DISABLED_EVT:
       /* USER CODE BEGIN CUSTOM_STM_DATA_IMU_NOTIFY_DISABLED_EVT */
-    	notifyStatus=0;
+    	notifyIMUStatus=0;
       /* USER CODE END CUSTOM_STM_DATA_IMU_NOTIFY_DISABLED_EVT */
+      break;
+
+    case CUSTOM_STM_GET_STATE_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_GET_STATE_NOTIFY_ENABLED_EVT */
+    	notifyStateStatus=1;
+      /* USER CODE END CUSTOM_STM_GET_STATE_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_GET_STATE_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_GET_STATE_NOTIFY_DISABLED_EVT */
+    	notifyStateStatus=0;
+      /* USER CODE END CUSTOM_STM_GET_STATE_NOTIFY_DISABLED_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
@@ -202,13 +222,13 @@ __USED void Custom_Data_imu_Update_Char(void) /* Property Read */
   uint8_t updateflag = 0;
 
   /* USER CODE BEGIN Data_imu_UC_1*/
-  	updateflag=notifyStatus;
-    uint8_t testData=20;
+  updateflag=notifyIMUStatus;
+  uint8_t testData = 5;
   /* USER CODE END Data_imu_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DATA_IMU, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DATA_IMU, &testData);
   }
 
   /* USER CODE BEGIN Data_imu_UC_Last*/
@@ -222,8 +242,7 @@ void Custom_Data_imu_Send_Notification(void) /* Property Notification */
   uint8_t updateflag = 0;
 
   /* USER CODE BEGIN Data_imu_NS_1*/
-  updateflag=notifyStatus;
-  uint8_t testData=20;
+  updateflag=notifyIMUStatus;
   /* USER CODE END Data_imu_NS_1*/
 
   if (updateflag != 0)
@@ -234,6 +253,47 @@ void Custom_Data_imu_Send_Notification(void) /* Property Notification */
   /* USER CODE BEGIN Data_imu_NS_Last*/
 
   /* USER CODE END Data_imu_NS_Last*/
+
+  return;
+}
+
+__USED void Custom_Get_state_Update_Char(void) /* Property Read */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Get_state_UC_1*/
+  updateflag=notifyStateStatus;
+  uint8_t testData = 10;
+
+  /* USER CODE END Get_state_UC_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_GET_STATE, &testData);
+  }
+
+  /* USER CODE BEGIN Get_state_UC_Last*/
+
+  /* USER CODE END Get_state_UC_Last*/
+  return;
+}
+
+void Custom_Get_state_Send_Notification(void) /* Property Notification */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Get_state_NS_1*/
+  updateflag=notifyStateStatus;
+  /* USER CODE END Get_state_NS_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_GET_STATE, (uint8_t *)NotifyCharData);
+  }
+
+  /* USER CODE BEGIN Get_state_NS_Last*/
+
+  /* USER CODE END Get_state_NS_Last*/
 
   return;
 }
