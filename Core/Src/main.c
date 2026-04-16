@@ -46,6 +46,7 @@ IPCC_HandleTypeDef hipcc;
 RTC_HandleTypeDef hrtc;
 
 TIM_HandleTypeDef htim16;
+TIM_HandleTypeDef htim17;
 
 /* USER CODE BEGIN PV */
 
@@ -58,6 +59,7 @@ static void MX_GPIO_Init(void);
 static void MX_IPCC_Init(void);
 static void MX_RTC_Init(void);
 static void MX_TIM16_Init(void);
+static void MX_TIM17_Init(void);
 static void MX_RF_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -107,6 +109,7 @@ int main(void)
   MX_GPIO_Init();
   MX_RTC_Init();
   MX_TIM16_Init();
+  MX_TIM17_Init();
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim16);
@@ -315,6 +318,42 @@ static void MX_TIM16_Init(void)
 }
 
 /**
+  * @brief TIM17 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM17_Init(void)
+{
+
+  /* USER CODE BEGIN TIM17_Init 0 */
+
+  /* USER CODE END TIM17_Init 0 */
+
+  /* USER CODE BEGIN TIM17_Init 1 */
+
+  /* USER CODE END TIM17_Init 1 */
+  htim17.Instance = TIM17;
+  htim17.Init.Prescaler = 3200-1;
+  htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim17.Init.Period = 10000-1;
+  htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim17.Init.RepetitionCounter = 0;
+  htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim17) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OnePulse_Init(&htim17, TIM_OPMODE_SINGLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM17_Init 2 */
+
+  /* USER CODE END TIM17_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -355,6 +394,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_IMU, CFG_SCH_PRIO_0);
 //		UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_STATE, CFG_SCH_PRIO_0);
 //		HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+	}else if(htim->Instance == TIM17)
+	{
+		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
 	}
 }
 

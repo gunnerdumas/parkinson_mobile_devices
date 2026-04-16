@@ -37,6 +37,7 @@ typedef enum
   /* parkinson_data */
   CUSTOM_STM_DATA_IMU,
   CUSTOM_STM_GET_STATE,
+  CUSTOM_STM_IO_CONTROL,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -47,6 +48,8 @@ typedef enum
   /* Get_State */
   CUSTOM_STM_GET_STATE_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_GET_STATE_NOTIFY_DISABLED_EVT,
+  /* IO_Control */
+  CUSTOM_STM_IO_CONTROL_WRITE_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -74,6 +77,7 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 extern uint16_t SizeData_Imu;
 extern uint16_t SizeGet_State;
+extern uint16_t SizeIo_Control;
 
 /* USER CODE BEGIN EC */
 

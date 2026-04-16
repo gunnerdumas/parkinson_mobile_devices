@@ -11,5 +11,5 @@
 ../Core/Src/stm32wbxx_hal_msp.c:118:6:HAL_IPCC_MspDeInit	2
 ../Core/Src/stm32wbxx_hal_msp.c:144:6:HAL_RTC_MspInit	3
 ../Core/Src/stm32wbxx_hal_msp.c:183:6:HAL_RTC_MspDeInit	2
-../Core/Src/stm32wbxx_hal_msp.c:206:6:HAL_TIM_Base_MspInit	2
-../Core/Src/stm32wbxx_hal_msp.c:232:6:HAL_TIM_Base_MspDeInit	2
+../Core/Src/stm32wbxx_hal_msp.c:206:6:HAL_TIM_Base_MspInit	3
+../Core/Src/stm32wbxx_hal_msp.c:245:6:HAL_TIM_Base_MspDeInit	3

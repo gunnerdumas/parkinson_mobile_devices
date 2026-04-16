@@ -143,6 +143,12 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       /* USER CODE END CUSTOM_STM_GET_STATE_NOTIFY_DISABLED_EVT */
       break;
 
+    case CUSTOM_STM_IO_CONTROL_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_IO_CONTROL_WRITE_EVT */
+
+      /* USER CODE END CUSTOM_STM_IO_CONTROL_WRITE_EVT */
+      break;
+
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
       /* USER CODE BEGIN CUSTOM_STM_NOTIFICATION_COMPLETE_EVT */
 
@@ -228,7 +234,7 @@ __USED void Custom_Data_imu_Update_Char(void) /* Property Read */
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DATA_IMU, &testData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DATA_IMU, (uint8_t *)UpdateCharData);
   }
 
   /* USER CODE BEGIN Data_imu_UC_Last*/
@@ -269,7 +275,7 @@ __USED void Custom_Get_state_Update_Char(void) /* Property Read */
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_GET_STATE, &testData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_GET_STATE, (uint8_t *)UpdateCharData);
   }
 
   /* USER CODE BEGIN Get_state_UC_Last*/

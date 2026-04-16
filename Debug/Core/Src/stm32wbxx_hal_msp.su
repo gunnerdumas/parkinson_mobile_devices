@@ -12,4 +12,4 @@
 ../Core/Src/stm32wbxx_hal_msp.c:144:6:HAL_RTC_MspInit	56	static
 ../Core/Src/stm32wbxx_hal_msp.c:183:6:HAL_RTC_MspDeInit	16	static
 ../Core/Src/stm32wbxx_hal_msp.c:206:6:HAL_TIM_Base_MspInit	16	static
-../Core/Src/stm32wbxx_hal_msp.c:232:6:HAL_TIM_Base_MspDeInit	16	static
+../Core/Src/stm32wbxx_hal_msp.c:245:6:HAL_TIM_Base_MspDeInit	16	static
