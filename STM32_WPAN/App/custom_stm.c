@@ -69,7 +69,6 @@ extern uint16_t Connection_Handle;
 uint16_t SizeData_Imu = 1;
 uint16_t SizeGet_State = 1;
 uint16_t SizeIo_Control = 1;
-extern TIM_HandleTypeDef htim17;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -81,6 +80,7 @@ static CustomContext_t CustomContext;
  */
 
 /* USER CODE BEGIN PV */
+extern TIM_HandleTypeDef htim17;
 
 /* USER CODE END PV */
 
@@ -239,8 +239,14 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
           {
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_3_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-            HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
-			HAL_TIM_Base_Start(&htim17);
+
+			if(attribute_modified->Attr_Data[0]==0x01){
+				HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
+				HAL_TIM_Base_Stop_IT(&htim17);
+				__HAL_TIM_SET_COUNTER(&htim17, 0);
+				__HAL_TIM_CLEAR_IT(&htim17, TIM_IT_UPDATE);
+				HAL_TIM_Base_Start_IT(&htim17);
+			}
             /* USER CODE END CUSTOM_STM_Service_1_Char_3_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
           } /* if (attribute_modified->Attr_Handle == (CustomContext.CustomIo_ControlHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */

@@ -229,7 +229,7 @@ __USED void Custom_Data_imu_Update_Char(void) /* Property Read */
 
   /* USER CODE BEGIN Data_imu_UC_1*/
   updateflag=notifyIMUStatus;
-  uint8_t testData = 5;
+
   /* USER CODE END Data_imu_UC_1*/
 
   if (updateflag != 0)
@@ -269,7 +269,6 @@ __USED void Custom_Get_state_Update_Char(void) /* Property Read */
 
   /* USER CODE BEGIN Get_state_UC_1*/
   updateflag=notifyStateStatus;
-  uint8_t testData = 10;
 
   /* USER CODE END Get_state_UC_1*/
 

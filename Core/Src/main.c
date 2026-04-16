@@ -113,6 +113,8 @@ int main(void)
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim16);
+  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
+  HAL_GPIO_WritePin(MOTOR_GPIO_Port, MOTOR_Pin, 0);
 //  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
 //  HAL_GPIO_WritePin(MOTOR_GPIO_Port, MOTOR_Pin, 1);
   /* USER CODE END 2 */
@@ -343,10 +345,6 @@ static void MX_TIM17_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_OnePulse_Init(&htim17, TIM_OPMODE_SINGLE) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN TIM17_Init 2 */
 
   /* USER CODE END TIM17_Init 2 */
@@ -396,6 +394,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //		HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
 	}else if(htim->Instance == TIM17)
 	{
+		HAL_TIM_Base_Stop_IT(&htim17);
 		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
 	}
 }

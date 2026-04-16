@@ -6,4 +6,4 @@
 ../STM32_WPAN/App/custom_app.c:226:13:Custom_Data_imu_Update_Char	2
 ../STM32_WPAN/App/custom_app.c:246:6:Custom_Data_imu_Send_Notification	2
 ../STM32_WPAN/App/custom_app.c:266:13:Custom_Get_state_Update_Char	2
-../STM32_WPAN/App/custom_app.c:287:6:Custom_Get_state_Send_Notification	2
+../STM32_WPAN/App/custom_app.c:286:6:Custom_Get_state_Send_Notification	2
