@@ -229,12 +229,13 @@ __USED void Custom_Data_imu_Update_Char(void) /* Property Read */
 
   /* USER CODE BEGIN Data_imu_UC_1*/
   updateflag=notifyIMUStatus;
+  uint8_t testData = 0x05;
 
   /* USER CODE END Data_imu_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DATA_IMU, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DATA_IMU, &testData);
   }
 
   /* USER CODE BEGIN Data_imu_UC_Last*/
@@ -269,12 +270,13 @@ __USED void Custom_Get_state_Update_Char(void) /* Property Read */
 
   /* USER CODE BEGIN Get_state_UC_1*/
   updateflag=notifyStateStatus;
+  uint8_t testData = 0x0A;
 
   /* USER CODE END Get_state_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_GET_STATE, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_GET_STATE, &testData);
   }
 
   /* USER CODE BEGIN Get_state_UC_Last*/

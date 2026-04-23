@@ -396,6 +396,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		HAL_TIM_Base_Stop_IT(&htim17);
 		HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 0);
+		HAL_GPIO_WritePin(MOTOR_GPIO_Port, MOTOR_Pin, 0);
 	}
 }
 

@@ -4,6 +4,6 @@
 ../STM32_WPAN/App/custom_app.c:170:6:Custom_APP_Notification	3
 ../STM32_WPAN/App/custom_app.c:207:6:Custom_APP_Init	1
 ../STM32_WPAN/App/custom_app.c:226:13:Custom_Data_imu_Update_Char	2
-../STM32_WPAN/App/custom_app.c:246:6:Custom_Data_imu_Send_Notification	2
-../STM32_WPAN/App/custom_app.c:266:13:Custom_Get_state_Update_Char	2
-../STM32_WPAN/App/custom_app.c:286:6:Custom_Get_state_Send_Notification	2
+../STM32_WPAN/App/custom_app.c:247:6:Custom_Data_imu_Send_Notification	2
+../STM32_WPAN/App/custom_app.c:267:13:Custom_Get_state_Update_Char	2
+../STM32_WPAN/App/custom_app.c:288:6:Custom_Get_state_Send_Notification	2

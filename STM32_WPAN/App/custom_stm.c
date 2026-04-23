@@ -242,6 +242,7 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
 
 			if(attribute_modified->Attr_Data[0]==0x01){
 				HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, 1);
+				HAL_GPIO_WritePin(MOTOR_GPIO_Port, MOTOR_Pin, 1);
 				HAL_TIM_Base_Stop_IT(&htim17);
 				__HAL_TIM_SET_COUNTER(&htim17, 0);
 				__HAL_TIM_CLEAR_IT(&htim17, TIM_IT_UPDATE);
