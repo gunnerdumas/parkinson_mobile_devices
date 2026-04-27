@@ -97,7 +97,7 @@ uint16_t Connection_Handle;
 /* USER CODE BEGIN PV */
 uint8_t notifyStatus = 0;
 uint8_t timerStatus = 0;
-
+static uint8_t motor_pulse_count = 0;
 static LSM6DSO32_Handle_t imu;
 static TremorDetector_t   tremor;
 static bool               imu_ready = false;
@@ -169,6 +169,25 @@ void Push_IMU_Data(void)
 
     memcpy(UpdateCharData, &pkt, sizeof(TremorBLEPacket_t));
     Custom_Data_imu_Update_Char();
+
+    
+    if (d->tremor_detected && motor_pulse_count == 0) {
+            motor_pulse_count = 5;  //500ms pulse
+        }
+
+        if (motor_pulse_count > 0) {
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); //motor on  
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);  //LED om
+            motor_pulse_count--;
+        } else {
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET); // motor OFF 
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET); // LED OFF 
+        }
+
+        /* Reset pulse when tremor clears */
+        if (!d->tremor_detected) {
+            motor_pulse_count = 0;
+        } 
 }
 
 /* USER CODE END PFP */
