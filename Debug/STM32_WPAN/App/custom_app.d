@@ -22,6 +22,8 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio_ex.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_hsem.h \
+ ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c.h \
+ ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c_ex.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_ipcc.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_pwr.h \
  ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_pwr.h \
@@ -102,7 +104,9 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
  ../Middlewares/ST/STM32_WPAN/ble/svc/Inc/svc_ctl.h \
  ../Middlewares/ST/STM32_WPAN/ble/svc/Inc/uuid.h \
  ../STM32_WPAN/App/custom_app.h ../STM32_WPAN/App/custom_stm.h \
- ../Utilities/sequencer/stm32_seq.h
+ ../Utilities/sequencer/stm32_seq.h ../Core/Inc/lsm6dso32.h \
+ ../Core/Inc/main.h ../Core/Inc/tremor_detect.h \
+ ../Drivers/CMSIS/DSP/Include/arm_math.h ../Core/Inc/debug_itm.h
 ../Core/Inc/main.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal.h:
 ../Core/Inc/stm32wbxx_hal_conf.h:
@@ -127,6 +131,8 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_gpio_ex.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_hsem.h:
+../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c.h:
+../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_i2c_ex.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_ipcc.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_hal_pwr.h:
 ../Drivers/STM32WBxx_HAL_Driver/Inc/stm32wbxx_ll_pwr.h:
@@ -213,3 +219,8 @@ STM32_WPAN/App/custom_app.o: ../STM32_WPAN/App/custom_app.c \
 ../STM32_WPAN/App/custom_app.h:
 ../STM32_WPAN/App/custom_stm.h:
 ../Utilities/sequencer/stm32_seq.h:
+../Core/Inc/lsm6dso32.h:
+../Core/Inc/main.h:
+../Core/Inc/tremor_detect.h:
+../Drivers/CMSIS/DSP/Include/arm_math.h:
+../Core/Inc/debug_itm.h:

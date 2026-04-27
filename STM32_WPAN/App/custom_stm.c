@@ -64,7 +64,7 @@ extern uint16_t Connection_Handle;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-uint16_t SizeData_Imu = 1;
+uint16_t SizeData_Imu = 32;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -323,7 +323,7 @@ void SVCCTL_InitCustomSvc(void)
                           ATTR_PERMISSION_NONE,
                           GATT_DONT_NOTIFY_EVENTS,
                           0x10,
-                          CHAR_VALUE_LEN_CONSTANT,
+                          CHAR_VALUE_LEN_VARIABLE,
                           &(CustomContext.CustomData_ImuHdle));
   if (ret != BLE_STATUS_SUCCESS)
   {
@@ -561,4 +561,3 @@ static tBleStatus Generic_STM_App_Update_Char_Ext(uint16_t ConnectionHandle, uin
   }
   return ret;
 }
-

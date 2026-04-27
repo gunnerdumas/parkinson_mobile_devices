@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (13.3.rel1)
+# Toolchain: GNU Tools for STM32 (14.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -70,8 +70,8 @@ all: main-build
 main-build: parkinson_device.elf secondary-outputs
 
 # Tool invocations
-parkinson_device.elf parkinson_device.map: $(OBJS) $(USER_OBJS) C:\Users\gtcdu\OneDrive\Programming\nucleo_bt\parkinson_device\STM32WB50CGUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "parkinson_device.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\gtcdu\OneDrive\Programming\nucleo_bt\parkinson_device\STM32WB50CGUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="parkinson_device.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+parkinson_device.elf parkinson_device.map: $(OBJS) $(USER_OBJS) D:\Senior\ Design\parkinson_mobile_devices-main\STM32WB50CGUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "parkinson_device.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Senior Design\parkinson_mobile_devices-main\STM32WB50CGUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="parkinson_device.map" -Wl,--gc-sections -static -L../Drivers/CMSIS -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
