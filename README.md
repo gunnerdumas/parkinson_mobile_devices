@@ -1,25 +1,6 @@
 ﻿# Parkinson's Disease Tremor Detection
 ## Branch: Tremor-Detect
 
-### Project Overview
-Wearable tremor detection system for Parkinson's Disease monitoring using the STM32WB50CGU5 custom board. Detects 4-6 Hz Parkinsonian resting tremor via LSM6DSO32 IMU, 256-point CMSIS-DSP FFT, and transmits data over BLE and SWO.
-
----
-
-### Hardware
-| Signal | Pin |
-|--------|-----|
-| IMU SCL | PB6 |
-| IMU SDA | PB7 |
-| IMU INT1 | PB5 |
-| IMU INT2 | PB4 |
-| Buzzer | PB1 |
-| Motor | PB0 |
-| SWO Debug | PB3 |
-
-- **MCU:** STM32WB50CGU5 (Cortex-M4 @ 32MHz + Cortex-M0+ BLE radio)
-- **IMU:** LSM6DSO32 - I2C address 0x6B (SA0 tied to VCC)
-- **BLE:** Advertises as "Parkinson_LDU_3"
 
 ---
 
