@@ -1,0 +1,6 @@
+../Core/Src/tremor_detect.c:10:13:compute_hann	32	static
+../Core/Src/tremor_detect.c:16:14:prefilter	24	static
+../Core/Src/tremor_detect.c:25:6:TremorDetect_Init	24	static
+../Core/Src/tremor_detect.c:35:6:TremorDetect_AddSample	56	static
+../Core/Src/tremor_detect.c:76:6:TremorDetect_Process	56	static
+../Core/Src/tremor_detect.c:159:6:TremorDetect_GetSpectrum	32	static

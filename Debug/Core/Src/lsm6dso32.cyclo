@@ -1,0 +1,5 @@
+../Core/Src/lsm6dso32.c:3:26:reg_write	1
+../Core/Src/lsm6dso32.c:9:26:reg_read	2
+../Core/Src/lsm6dso32.c:17:19:LSM6DSO32_Init	3
+../Core/Src/lsm6dso32.c:37:19:LSM6DSO32_ReadAll	2
+../Core/Src/lsm6dso32.c:56:19:LSM6DSO32_ReadGyro	2

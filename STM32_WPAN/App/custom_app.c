@@ -29,7 +29,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lsm6dso32.h"
+#include "tremor_detect.h"
+#include "debug_itm.h"
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +49,25 @@ typedef struct
 } Custom_App_Context_t;
 
 /* USER CODE BEGIN PTD */
-
+typedef struct __attribute__((packed)) {
+    uint8_t  tremor_detected;
+    uint16_t dominant_freq_x100;
+    uint16_t peak_fft_mag_x10;
+    uint16_t band_energy_x10;
+    uint8_t  tremor_pct;
+    int16_t  gx_x100;
+    int16_t  gy_x100;
+    int16_t  gz_x100;
+    uint16_t gyro_mag_x100;
+    int16_t  ax_x10;
+    int16_t  ay_x10;
+    int16_t  az_x10;
+    uint16_t accel_mag_x10;
+    uint16_t jerk_x10;
+    uint32_t timestamp_ms;
+    uint16_t global_freq_x100;
+    uint16_t global_mag_x10;
+} TremorBLEPacket_t;
 /* USER CODE END PTD */
 
 /* Private defines ------------------------------------------------------------*/
@@ -75,7 +97,12 @@ uint16_t Connection_Handle;
 /* USER CODE BEGIN PV */
 uint8_t notifyStatus = 0;
 uint8_t timerStatus = 0;
+static uint8_t motor_pulse_count = 0;
+static LSM6DSO32_Handle_t imu;
+static TremorDetector_t   tremor;
+static bool               imu_ready = false;
 
+extern I2C_HandleTypeDef hi2c1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,13 +114,80 @@ static void Custom_Data_imu_Send_Notification(void);
 
 void Push_IMU_Data(void)
 {
+    if (!imu_ready) return;
 
-	UpdateCharData[0]^=0x01;
-//	Custom_Data_imu_Send_Notification();
+    static uint8_t raw_tick = 0;
 
-	Custom_Data_imu_Update_Char();
-//	UTIL_SEQ_SetTask(1<<CFG_TASK_PUSH_IMU, CFG_SCH_PRIO_0);
+    // Sample IMU
+    LSM6DSO32_Data_t imu_data;
+    if (LSM6DSO32_ReadAll(&imu, &imu_data) != HAL_OK) return;
 
+    TremorDetect_AddSample(&tremor,
+                           imu_data.gx, imu_data.gy, imu_data.gz,
+                           imu_data.ax, imu_data.ay, imu_data.az);
+
+    // Only process when FFT window is full
+    TremorDetect_Process(&tremor);
+
+    raw_tick++;
+    if (raw_tick < 10) return;
+    raw_tick = 0;
+
+    ParkinsonsData_t *d = &tremor.data;
+
+    // SWO CSV log
+    printf("%lu,%.4f,%.4f,%.4f,%.4f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.4f,%.2f,%.2f,%.4f,%.2f,%d,%.1f\r\n",
+           HAL_GetTick(),
+           d->gx_raw, d->gy_raw, d->gz_raw, d->gyro_magnitude,
+           d->ax_raw, d->ay_raw, d->az_raw, d->accel_magnitude,
+           d->accel_vertical, d->jerk_magnitude,
+           d->dominant_freq, d->peak_fft_mag, d->tremor_band_energy,
+           d->global_dominant_freq, d->global_peak_fft_mag,
+           d->tremor_detected ? 1 : 0,
+           d->tremor_percent);
+
+    // Pack BLE payload
+    TremorBLEPacket_t pkt;
+    pkt.tremor_detected    = d->tremor_detected ? 1 : 0;
+    pkt.dominant_freq_x100 = (uint16_t)(d->dominant_freq      * 100.0f);
+    pkt.peak_fft_mag_x10   = (uint16_t)(d->peak_fft_mag       * 10.0f);
+    pkt.band_energy_x10    = (uint16_t)(d->tremor_band_energy  * 10.0f);
+    pkt.tremor_pct         = (uint8_t)  d->tremor_percent;
+    pkt.gx_x100            = (int16_t) (d->gx_raw             * 100.0f);
+    pkt.gy_x100            = (int16_t) (d->gy_raw             * 100.0f);
+    pkt.gz_x100            = (int16_t) (d->gz_raw             * 100.0f);
+    pkt.gyro_mag_x100      = (uint16_t)(d->gyro_magnitude      * 100.0f);
+    pkt.ax_x10             = (int16_t) (d->ax_raw             * 10.0f);
+    pkt.ay_x10             = (int16_t) (d->ay_raw             * 10.0f);
+    pkt.az_x10             = (int16_t) (d->az_raw             * 10.0f);
+    pkt.accel_mag_x10      = (uint16_t)(d->accel_magnitude     * 10.0f);
+    pkt.jerk_x10           = (uint16_t)(d->jerk_magnitude      * 10.0f);
+    pkt.timestamp_ms       = HAL_GetTick();
+    pkt.global_freq_x100   = (uint16_t)(d->global_dominant_freq * 100.0f);
+    pkt.global_mag_x10     = (uint16_t)(d->global_peak_fft_mag  * 10.0f);
+
+
+    memcpy(UpdateCharData, &pkt, sizeof(TremorBLEPacket_t));
+    Custom_Data_imu_Update_Char();
+
+    
+    if (d->tremor_detected && motor_pulse_count == 0) {
+            motor_pulse_count = 5;  //500ms pulse
+        }
+
+        if (motor_pulse_count > 0) {
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); //motor on  
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);  //LED om
+            motor_pulse_count--;
+        } else {
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET); // motor OFF 
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET); // LED OFF 
+        }
+
+        /* Reset pulse when tremor clears */
+        if (!d->tremor_detected) {
+            motor_pulse_count = 0;
+        } 
 }
 
 /* USER CODE END PFP */
@@ -181,7 +275,19 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
 void Custom_APP_Init(void)
 {
   /* USER CODE BEGIN CUSTOM_APP_Init */
-
+  printf("\r\n=== PARKINSON TREMOR MONITOR ===\r\n");
+  printf("IMU init... ");
+  if (LSM6DSO32_Init(&imu, &hi2c1, LSM6DSO32_I2C_ADDR_HIGH) != HAL_OK) {
+      printf("FAILED\r\n");
+      imu_ready = false;
+  } else {
+      printf("OK\r\n");
+      TremorDetect_Init(&tremor);
+      imu_ready = true;
+      printf("TIME_MS,GX_DPS,GY_DPS,GZ_DPS,GYRO_MAG,AX_MG,AY_MG,AZ_MG,"
+             "ACCEL_MAG,ACCEL_VERT,JERK_MG_S,DOMINANT_HZ,PEAK_FFT_MAG,"
+             "BAND_ENERGY,GLOBAL_HZ,GLOBAL_MAG,TREMOR,TREMOR_PCT\r\n");
+  }
   /* USER CODE END CUSTOM_APP_Init */
   return;
 }
