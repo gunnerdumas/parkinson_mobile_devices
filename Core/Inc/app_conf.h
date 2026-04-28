@@ -120,7 +120,7 @@
 /**
  * Device name configuration for Generic Access Service
  */
-#define CFG_GAP_DEVICE_NAME             "Parkinson_LDU_3"
+#define CFG_GAP_DEVICE_NAME             "Parkinson_LDU_5"
 #define CFG_GAP_DEVICE_NAME_LENGTH      (15)
 
 /**
@@ -137,7 +137,7 @@
 /**
 *   Identity root key used to derive IRK and DHK(Legacy)
 */
-#define CFG_BLE_IR     {0x1A, 0x34, 0x56, 0x78, 0x9B, 0xBC, 0xDE, 0xF0, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0}
+#define CFG_BLE_IR     {0x1F, 0x34, 0x56, 0x78, 0x9B, 0xBC, 0xDE, 0xF0, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0}
 
 /**
 * Encryption root key used to derive LTK(Legacy) and CSRK

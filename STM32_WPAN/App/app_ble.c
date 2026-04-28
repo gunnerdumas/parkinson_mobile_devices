@@ -227,7 +227,7 @@ uint8_t index_con_int, mutex;
  */
 uint8_t a_AdvData[17] =
 {
-  16, AD_TYPE_COMPLETE_LOCAL_NAME, 'P', 'a', 'r', 'k', 'i', 'n', 's', 'o', 'n', '_', 'L', 'D', 'U', '_', '3',  /* Complete name */
+  16, AD_TYPE_COMPLETE_LOCAL_NAME, 'P', 'a', 'r', 'k', 'i', 'n', 's', 'o', 'n', '_', 'L', 'D', 'U', '_', '5',  /* Complete name */
 
 };
 
