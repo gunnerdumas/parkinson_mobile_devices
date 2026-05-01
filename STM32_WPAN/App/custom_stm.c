@@ -30,6 +30,7 @@
 typedef struct{
   uint16_t  CustomParkinson_DataHdle;                    /**< parkinson_data handle */
   uint16_t  CustomData_ImuHdle;                  /**< Data_IMU handle */
+  uint16_t  CustomMotor_CtrlHdle;
 /* USER CODE BEGIN Context */
   /* Place holder for Characteristic Descriptors Handle*/
 
@@ -65,7 +66,7 @@ extern uint16_t Connection_Handle;
 
 /* Private variables ---------------------------------------------------------*/
 uint16_t SizeData_Imu = 32;
-
+uint16_t SizeMotor_Ctrl  = 1;
 /**
  * START of Section BLE_DRIVER_CONTEXT
  */
@@ -105,6 +106,7 @@ do {\
 
 #define COPY_PARKINSON_DATA_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
 #define COPY_DATA_IMU_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_MOTOR_CTRL_UUID(uuid_struct)   COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x02,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 
 /* USER CODE BEGIN PF */
 
@@ -184,9 +186,23 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
               break;
             }
           }  /* if (attribute_modified->Attr_Handle == (CustomContext.CustomData_ImuHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
-
-          /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
-
+		  else if (attribute_modified->Attr_Handle == (CustomContext.CustomMotor_CtrlHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          {
+            return_value = SVCCTL_EvtAckFlowEnable;
+            switch (attribute_modified->Attr_Data[0])
+            {
+              case (!(COMSVC_Notification)):
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_MOTOR_CTRL_NOTIFY_DISABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                break;
+              case COMSVC_Notification:
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_MOTOR_CTRL_NOTIFY_ENABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                break;
+              default:
+                break;
+            }
+          }
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
           break;
 
@@ -290,7 +306,7 @@ void SVCCTL_InitCustomSvc(void)
    * This value doesn't take into account number of descriptors manually added
    * In case of descriptors added, please update the max_attr_record value accordingly in the next SVCCTL_InitService User Section
    */
-  max_attr_record = 4;
+  max_attr_record = 7;
 
   /* USER CODE BEGIN SVCCTL_InitService1 */
   /* max_attr_record to be updated if descriptors have been added */
@@ -335,7 +351,20 @@ void SVCCTL_InitCustomSvc(void)
   }
 
   /* USER CODE BEGIN SVCCTL_Init_Service1_Char1 */
-  /* Place holder for Characteristic Descriptors */
+  COPY_MOTOR_CTRL_UUID(uuid.Char_UUID_128);
+  ret = aci_gatt_add_char(CustomContext.CustomParkinson_DataHdle,
+                          UUID_TYPE_128, &uuid,
+                          SizeMotor_Ctrl,
+                          CHAR_PROP_NOTIFY,
+                          ATTR_PERMISSION_NONE,
+                          GATT_DONT_NOTIFY_EVENTS,
+                          0x10,
+                          CHAR_VALUE_LEN_CONSTANT,
+                          &(CustomContext.CustomMotor_CtrlHdle));
+  if (ret != BLE_STATUS_SUCCESS)
+    APP_DBG_MSG("  Fail   : aci_gatt_add_char MOTOR_CTRL, error: 0x%x \n\r", ret);
+  else
+    APP_DBG_MSG("  Success: aci_gatt_add_char MOTOR_CTRL \n\r");
 
   /* USER CODE END SVCCTL_Init_Service1_Char1 */
 
